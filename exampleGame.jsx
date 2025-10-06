@@ -1,8 +1,13 @@
 import GameFrame from "./GameFrame";
 
+// delete from final
+
 function App() {
   return (
-    <h1>Main page</h1>
+    <div>
+      <h1>My Arcade</h1>
+      <GameFrame />
+    </div>
   );
 }
 

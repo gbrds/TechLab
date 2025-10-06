@@ -2,6 +2,8 @@ import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import SnakeGame from "./games/snake/SnakeGame";
 
+// delete from final
+
 export default function GameFrame() {
   const gameRef = useRef(null);
 

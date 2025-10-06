@@ -1,5 +1,7 @@
 import Phaser from "phaser";
 
+/* Delete from final */
+
 export default class SnakeGame extends Phaser.Scene {
   constructor() {
     super("SnakeGame");
