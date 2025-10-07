@@ -1,74 +1,58 @@
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import './App.css';
-
+import UXUnlocked from './svg/UX_Unlocked.svg';
+import UXHover from './svg/UX_Hover.svg';
+import UXLocked from './svg/UX_Locked.svg';
+import DevLocked from './svg/Dev_Locked.svg';
+import DevHover from './svg/Dev_Hover.svg';
+import DevUnlocked from './svg/Dev_Unlocked.svg';
+import ICTLocked from './svg/ICT_Locked.svg';
+import ICTHover from './svg/ICT_Hover.svg';
+import ICTUnlocked from './svg/ICT_Unlocked.svg';
+import SusLocked from './svg/Sus_Locked.svg';
+import SusHover from './svg/Sus_Hover.svg';
+import SusUnlocked from './svg/Sus_Unlocked.svg';
+import ITLocked from './svg/IT_Locked.svg';
+import ITHover from './svg/IT_Hover.svg';
+import ITUnlocked from './svg/IT_Unlocked.svg';
 
 function App() {
   const folders = [
     {
       id: 1,
-      title: "UX/UI disaini nooremspetsialist",
       unlocked: false,
       completed: false,
       progress: "0/5",
-      colors: {
-        tabStart: 'rgba(140,128,190,0.98)',
-        tabEnd: 'rgba(108,96,165,0.98)',
-        bodyStart: 'rgba(98,86,150,0.96)',
-        bodyEnd: 'rgba(66,57,105,0.96)'
-      }
+      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked }
     },
     {
       id: 2,
-      title: "Noorem tarkvaraarendaja",
       unlocked: false,
       completed: false,
       progress: "0/5",
-      colors: {
-        tabStart: 'rgba(115, 169, 173, 0.98)',
-        tabEnd: 'rgba(89, 143, 147, 0.98)',
-        bodyStart: 'rgba(65, 118, 122, 0.96)',
-        bodyEnd: 'rgba(42, 94, 98, 0.96)'
-      }
+      icons: { unlocked: DevUnlocked, hover: DevHover, locked: DevLocked}
     },
     {
       id: 3,
-      title: "Kestlikud tehnoloogiad",
       unlocked: false,
       completed: false,
       progress: "0/5",
-      colors: {
-        tabStart: 'rgba(77, 173, 143, 0.98)',
-        tabEnd: 'rgba(48, 140, 112, 0.98)',
-        bodyStart: 'rgba(28, 115, 90, 0.96)',
-        bodyEnd: 'rgba(15, 92, 70, 0.96)'
-      }
+      icons: { unlocked: SusUnlocked, hover: SusHover, locked: SusLocked }
     },
     {
       id: 4,
-      title: "IT süsteemide nooremspetsialist",
       unlocked: false,
       completed: false,
       progress: "0/5",
-      colors: {
-        tabStart: 'rgba(180, 180, 180, 0.98)',
-        tabEnd: 'rgba(140, 140, 140, 0.98)',
-        bodyStart: 'rgba(115, 115, 115, 0.96)',
-        bodyEnd: 'rgba(85, 85, 85, 0.96)'
-      }
+      icons: { unlocked: ITUnlocked, hover: ITHover, locked: ITLocked }
     },
     {
       id: 5,
-      title: "Info- ja kommunikatsioonitehnoloogia",
       unlocked: false,
       completed: false,
       progress: "0/5",
-      colors: {
-        tabStart: 'rgba(189, 153, 78, 0.98)',
-        tabEnd: 'rgba(156, 121, 49, 0.98)',
-        bodyStart: 'rgba(132, 98, 34, 0.96)',
-        bodyEnd: 'rgba(105, 78, 26, 0.96)'
-      }
+      icons: { unlocked: ICTUnlocked, hover: ICTHover, locked: ICTLocked}
     }
   ];
 

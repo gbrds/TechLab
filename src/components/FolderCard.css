@@ -1,3 +1,4 @@
+/* Minimal styles needed when using SVG assets */
 .folder-card {
   display: flex;
   flex-direction: column;
@@ -7,118 +8,39 @@
 }
 
 .folder-container {
-  width: 140px;
-  height: 110px;
+  width: 130px;
+  height: 120px;
   position: relative;
-  transition: transform 0.2s ease;
   cursor: pointer;
 }
 
-.folder-container.locked {}
-
-.folder-container.unlocked {}
-
-
-.folder-shape {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+.folder-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.2s ease;
+  user-select: none;
 }
 
-.folder-tab {
-  position: absolute;
-  top: 6px;
-  left: 14px;
-  width: 54px;
-  height: 18px;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
-  background: linear-gradient(180deg, var(--folder-tab-start, rgba(140, 128, 190, 0.98)) 0%, var(--folder-tab-end, rgba(108, 96, 165, 0.98)) 100%);
-  box-shadow: 0 2px 0 rgba(0,0,0,0.12) inset, 0 1px 6px rgba(0,0,0,0.25);
-}
-
-.folder-body {
-  position: absolute;
-  top: 16px;
-  left: 8px;
-  right: 8px;
-  bottom: 8px;
-  border-radius: 8px;
-  background: linear-gradient(180deg, var(--folder-body-start, rgba(98, 86, 150, 0.96)) 0%, var(--folder-body-end, rgba(66, 57, 105, 0.96)) 100%);
-  border: 1px solid rgba(255,255,255,0.06);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 2px 0 rgba(0,0,0,0.15) inset;
-}
-
-.folder-container:hover {
+.folder-container:hover .folder-svg {
   transform: translateY(-2px);
 }
 
+/* Optional lock overlay (kept for future use) */
 .lock-badge {
   position: absolute;
-  top: -5px;           
-  right: -10px; 
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;      
+  top: -5px;
+  right: -10px;
+  font-size: 40px;
   line-height: 1;
   transform: rotate(20deg);
-  transform-origin: center;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.6); 
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
   z-index: 3;
-  pointer-events: none; 
+  pointer-events: none;
 }
 
-.folder-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.75rem;
-  position: relative;
-  z-index: 1; 
-}
-
-.design-tools {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  max-width: 90px;
-}
-
-.tool-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  font-weight: bold;
-  color: white;
-}
-
-.tool-figma {
-  background: linear-gradient(135deg, #a259ff 0%, #7b2cbf 100%);
-}
-
-.tool-sketch {
-  background: linear-gradient(135deg, #ffd60a 0%, #fca311 100%);
-}
-
-.tool-adobe {
-  background: linear-gradient(135deg, #ff006e 0%, #d62828 100%);
-}
-
-.tool-invision {
-  background: linear-gradient(135deg, #ff5c8d 0%, #ff0054 100%);
-}
-
-.folder-info {
-  width: 100%;
-}
-
+/* Footer info */
+.folder-info { width: 100%; }
 .folder-title {
   font-size: 0.875rem;
   font-weight: 500;
@@ -126,7 +48,6 @@
   margin-bottom: 0.5rem;
   color: white;
 }
-
 .folder-status {
   display: inline-flex;
   align-items: center;
@@ -138,17 +59,12 @@
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.9);
 }
-
 .folder-status.completed {
   background: rgba(46, 213, 115, 0.15);
   border-color: rgba(46, 213, 115, 0.4);
   color: #2ed573;
 }
-
-.status-separator {
-  opacity: 0.3;
-}
-
+.status-separator { opacity: 0.3; }
 .lock-status {
   display: flex;
   align-items: center;
