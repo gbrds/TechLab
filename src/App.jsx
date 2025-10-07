@@ -1,6 +1,7 @@
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import AlertBanner from "./components/AlertBanner";
+import ProgressPanel from "./components/ProgressPanel";
 import './App.css';
 import FolderLocked from './svg/Folder_Locked.svg';
 import FolderUnlocked from './svg/Folder_Unlocked.svg';
@@ -56,9 +57,13 @@ function App() {
   });
 
   return (
-    <div style={{ padding: '2rem', background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 100%)', minHeight: '100vh' }}>
+    <div style={{ padding: '2rem', background: '#160C21', minHeight: '100vh' }}>
+      <div className="app-title">🚨 VOCO TechLab</div>
       <AlertBanner allCompleted={folders.every(f => f.status === 'completed')} />
-      <FolderGrid folders={folders} />
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: '3rem', alignItems: 'start', padding: '0 2rem' }}>
+        <FolderGrid folders={folders} />
+        <ProgressPanel />
+      </div>
     </div>
   );
 }
