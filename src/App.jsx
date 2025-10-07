@@ -1,5 +1,6 @@
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
+import AlertBanner from "./components/AlertBanner";
 import './App.css';
 import FolderLocked from './svg/Folder_Locked.svg';
 import FolderUnlocked from './svg/Folder_Unlocked.svg';
@@ -56,6 +57,7 @@ function App() {
 
   return (
     <div style={{ padding: '2rem', background: 'linear-gradient(135deg, #1a0b2e 0%, #2d1b4e 100%)', minHeight: '100vh' }}>
+      <AlertBanner allCompleted={folders.every(f => f.status === 'completed')} />
       <FolderGrid folders={folders} />
     </div>
   );

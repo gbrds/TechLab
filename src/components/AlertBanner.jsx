@@ -1,33 +1,17 @@
 import './AlertBanner.css';
+import AlertDefault from '../svg/AlertDefault.svg';
+import AlertRestored from '../svg/AlertRestored.svg';
+import MissionDefault from '../svg/MissionDefault.svg';
+import MissionCompleted from '../svg/MissionCompleted.svg';
 
-function AlertBanner() {
+function AlertBanner({ allCompleted = false }) {
+  const criticalSrc = allCompleted ? AlertRestored : AlertDefault;
+  const missionSrc = allCompleted ? MissionCompleted : MissionDefault;
+
   return (
     <div className="alerts-container">
-      <div className="alert-box critical">
-        <div className="alert-title critical">
-          <span>⚠️</span>
-          CRITICAL SYSTEM FAILURE
-          <span>⚠️</span>
-        </div>
-        <p className="alert-text">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. 
-          Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula 
-          consectetur, ultrices mauris. Maecenas vitae mattis tellus.
-        </p>
-      </div>
-
-      <div className="alert-box mission">
-        <div className="alert-title mission">
-          <span>🎯</span>
-          MISSIOON
-          <span>🎯</span>
-        </div>
-        <p className="alert-text">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. 
-          Aliquam in hendrerit urna. Pellentesque sit amet sapien fringilla, mattis ligula 
-          consectetur, ultrices mauris. Maecenas vitae mattis tellus
-        </p>
-      </div>
+      <img className="alert-svg" src={criticalSrc} alt="Critical/Mission Status" draggable={false} />
+      <img className="alert-svg" src={missionSrc} alt="Mission" draggable={false} />
     </div>
   );
 }
