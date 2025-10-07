@@ -18,7 +18,7 @@
 
 .folder-container.unlocked {}
 
-/* Visual folder (tab + body) */
+
 .folder-shape {
   position: absolute;
   inset: 0;
@@ -33,8 +33,7 @@
   height: 18px;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
-  /* Slightly lighter than body to create a subtle two-tone */
-  background: linear-gradient(180deg, rgba(140, 128, 190, 0.98) 0%, rgba(108, 96, 165, 0.98) 100%);
+  background: linear-gradient(180deg, var(--folder-tab-start, rgba(140, 128, 190, 0.98)) 0%, var(--folder-tab-end, rgba(108, 96, 165, 0.98)) 100%);
   box-shadow: 0 2px 0 rgba(0,0,0,0.12) inset, 0 1px 6px rgba(0,0,0,0.25);
 }
 
@@ -45,7 +44,7 @@
   right: 8px;
   bottom: 8px;
   border-radius: 8px;
-  background: linear-gradient(180deg, rgba(98, 86, 150, 0.96) 0%, rgba(66, 57, 105, 0.96) 100%);
+  background: linear-gradient(180deg, var(--folder-body-start, rgba(98, 86, 150, 0.96)) 0%, var(--folder-body-end, rgba(66, 57, 105, 0.96)) 100%);
   border: 1px solid rgba(255,255,255,0.06);
   box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 2px 0 rgba(0,0,0,0.15) inset;
 }

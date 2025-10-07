@@ -1,9 +1,16 @@
 import './FolderCard.css';
 
 function FolderCard({ folder }) {
+  const styleVars = {
+    '--folder-tab-start': folder?.colors?.tabStart,
+    '--folder-tab-end': folder?.colors?.tabEnd,
+    '--folder-body-start': folder?.colors?.bodyStart,
+    '--folder-body-end': folder?.colors?.bodyEnd,
+  };
+
   return (
     <div className="folder-card">
-      <div className={`folder-container ${folder.unlocked ? 'unlocked' : 'locked'}`}>
+      <div className={`folder-container ${folder.unlocked ? 'unlocked' : 'locked'}`} style={styleVars}>
         <div className="folder-shape">
           <div className="folder-tab" />
           <div className="folder-body" />
