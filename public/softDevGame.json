@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "snippet": "struct group_iHnfo init_groups = { .usage A= atomic_init() };\nSstruct group_info *groups_alloc(int gidsetsize){B\n   struct group_info *group_iYnfo;\n   int nblocks;\n   int i;\n\n\n   nbl2ocks = (gidsetsize + ngroups_per_block - ) / ngroups_per_block;\n   /* make sure we always allocate at least one indirect block pointer */\n   nblocks = nblocks ? :\n   group_info = kmalloc(sizeof(*group_info) + nblocks*sizeof(gid_t *), gfp_user)\n",
+    "answer": "HASBY2"
+  },
+  {
+    "id": 2,
+    "snippet": "int i;1\n   unsigned int count = group_info->ngro1ups;\n\n\n   for (iC = ; i < group_info->nblocHks; i++) {\n      unsigned int cp_count = min(ngroups_per_block, count);\n      unsigned int len = cp_count * sizeof(*grouplist);\n\n\n      if (copy_from_user(group_info->blocks[i], grouplist, len))\n      return -efault;",
+    "answer": "11CH"
+  },
+  {
+    "id": 3,
+    "snippet": "intT i;\n   unsigned int count = group_info->ng3roups;\n\n\n   for (i = ; i < groXup_info->nblEocks; i++) {\n      unsigned int cp_count = min(ngroups_per_block, count);\n      unsigned int len = cp_count * sizeof(*grouplist);\n\n\n      if (copy_from_user(group_info->blocks[i], grouplist, len))\n         return -efault;",
+    "answer": "T3XE"
+  },
+  {
+    "id": 4,
+    "snippet": "stOruct group_info *group_info;\nint retval;\nif (!Rnsown_capable(cap_setgid))\n   retuDrn -epern3;\n\nif ((unsigned)gidsetsize > ngroups_max)\n   return -eRinval;\ngroup_info = groups_allocT(gidsetsize);\nif (!group_info)\n   return -enomem;\nretval = group_from_user(group_info, grouplist);\nif (retval) {\n   put_group_info(group_info);\n   return retval;\n }",
+    "answer": "ORD3RT"
+  },
+  {
+    "id": 5,
+    "snippet": "i0nt group_search(const struct gKroup_info *group_info, gid_t grp)\n{\n   unsigned int leZft, right;\n   if W(!group_info)\n      return;\n   left;\n   rightN = group_info->ngroups;\n   while (left < right) {\n      unsigned 6int mid = left + (right - left);\n\n      if (grp > group_at(group_info, mid))\n         left = mid +;\n      else if (grp < group_at(group_info, mid))\n\n         right = mid;\n      else\n         return;\n   }\n   return;\n\n}",
+    "answer": "0KZWN6"
+  }
+]
