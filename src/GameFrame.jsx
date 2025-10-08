@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import SnakeGame from "./games/snake/SnakeGame";
+import CodeFinder from "./games/softDevGame/softDevGame.js";
 // PLACEHOLDER: Your teammates will import their game scenes here
 // import UXGame from "./games/ux/UXGame";
-// import DevGame from "./games/dev/DevGame";
 // import SusGame from "./games/sus/SusGame";
 // import ITGame from "./games/it/ITGame";
 // import ICTGame from "./games/ict/ICTGame";
@@ -13,14 +13,13 @@ export default function GameFrame({ folderId, onGameComplete, onClose }) {
   const phaserGameRef = useRef(null);
 
   useEffect(() => {
-    // PLACEHOLDER: Map folder IDs to game scenes
-    // Your teammates will replace this with their actual game scenes
+    // Map folder IDs to game scenes
     const gameScenes = {
-      1: SnakeGame,  // UX game (currently using Snake as placeholder)
-      2: SnakeGame,  // Dev game
-      3: SnakeGame,  // Sus game
-      4: SnakeGame,  // IT game
-      5: SnakeGame   // ICT game
+      1: SnakeGame,    // UX game (currently using Snake as placeholder)
+      2: CodeFinder,   // Dev game - Code Finder
+      3: SnakeGame,    // Sus game (placeholder)
+      4: SnakeGame,    // IT game (placeholder)
+      5: SnakeGame     // ICT game (placeholder)
     };
 
     const GameScene = gameScenes[folderId] || SnakeGame;

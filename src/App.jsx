@@ -3,6 +3,7 @@ import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import AlertBanner from "./components/AlertBanner";
 import ProgressPanel from "./components/ProgressPanel";
+import CompletionModal from "./components/CompletionModal";
 import './App.css';
 import FolderLocked from './svg/Folder_Locked.svg';
 import FolderUnlocked from './svg/Folder_Unlocked.svg';
@@ -84,8 +85,19 @@ function App() {
     let status = f.unlocked ? 'unlocked' : 'locked';
     if (f.progress >= passThreshold) status = 'completed';
 
+    // Update folder icon based on completion status
+    const updatedIcons = { ...f.icons };
+    if (f.progress >= passThreshold) {
+      // When completed, show unlocked icon
+      updatedIcons.unlocked = f.icons.unlocked;
+    } else {
+      // When not completed, show locked icon even if unlocked
+      updatedIcons.unlocked = f.icons.locked;
+    }
+
     return {
       ...f,
+      icons: updatedIcons,
       status,
       statusIcons: {
         locked: FolderLocked,
@@ -99,6 +111,9 @@ function App() {
   // State for showing game frame
   const [showGameFrame, setShowGameFrame] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
+  
+  // State for completion modal
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   // Function to handle game completion
   const handleGameComplete = (folderId, score) => {
@@ -106,10 +121,23 @@ function App() {
       const gameNames = { 1: 'UX', 2: 'Dev', 3: 'Sus', 4: 'IT', 5: 'ICT' };
       const gameName = gameNames[folderId];
       if (gameName) {
-        setCompletedGames(prev => ({
-          ...prev,
-          [gameName]: true
-        }));
+        setCompletedGames(prev => {
+          const newState = {
+            ...prev,
+            [gameName]: true
+          };
+          
+          // Check if all games are completed
+          const allCompleted = Object.values(newState).every(Boolean);
+          if (allCompleted) {
+            // Show completion modal after a short delay
+            setTimeout(() => {
+              setShowCompletionModal(true);
+            }, 500);
+          }
+          
+          return newState;
+        });
       }
     }
     setShowGameFrame(false);
@@ -128,6 +156,12 @@ function App() {
     setCurrentGameId(null);
   };
 
+  // Function to close completion modal
+  const closeCompletionModal = () => {
+    setShowCompletionModal(false);
+  };
+
+
   return (
     <div style={{ padding: '2rem', background: '#160C21', minHeight: '100vh' }}>
       <div className="app-title">🚨 VOCO TechLab</div>
@@ -145,6 +179,12 @@ function App() {
           onClose={closeGameFrame}
         />
       )}
+
+      {/* Completion Modal */}
+      <CompletionModal 
+        isOpen={showCompletionModal}
+        onClose={closeCompletionModal}
+      />
     </div>
   );
 }
