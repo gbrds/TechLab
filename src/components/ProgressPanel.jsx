@@ -45,11 +45,11 @@ function ProgressPanel({ completedCount = 0 }) {
 
   const getBottomText = () => {
     if (completedCount === 0) return "Alusta: UX/UI disaini nooremspetsialist";
-    if (completedCount === 1) return "Edu: UX/UI disaini nooremspetsialist lõpetatud";
-    if (completedCount === 2) return "Edu: Arendaja roll lõpetatud";
-    if (completedCount === 3) return "Edu: Süsteemihaldur roll lõpetatud";
-    if (completedCount === 4) return "Edu: IT-spetsialist roll lõpetatud";
-    if (completedCount === 5) return "Kõik rollid lõpetatud! VOCO TechLab on taastatud!";
+    if (completedCount === 1) return "Järgmine: Noorem tarkvaraarendaja";
+    if (completedCount === 2) return "Järgmine: Kestlikud tehnoloogiad";
+    if (completedCount === 3) return "Järgmine: IT süsteemide nooremspetsialist";
+    if (completedCount === 4) return "Järgmine: Info- ja kommunikatsioonitehnoloogia";
+    if (completedCount === 5) return "VOCO TechLab on taastatud!";
     return `Progress: ${completedCount}/5 rollid lõpetatud`;
   };
 
