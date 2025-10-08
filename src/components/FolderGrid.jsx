@@ -1,11 +1,19 @@
 import FolderCard from './FolderCard';
 import './FolderGrid.css';
 
-function FolderGrid({ folders }) {
+function FolderGrid({ folders, onFolderClick }) {
   return (
     <div className="folders-grid">
       {folders.map((folder) => (
-        <FolderCard key={folder.id} folder={folder} />
+        <div
+          key={folder.id}
+          onClick={() => onFolderClick && onFolderClick(folder)}
+          style={{
+            cursor: folder.unlocked ? 'pointer' : 'not-allowed',
+          }}
+        >
+          <FolderCard folder={folder} />
+        </div>
       ))}
     </div>
   );
