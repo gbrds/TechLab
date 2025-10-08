@@ -28,6 +28,11 @@ export default class CodeFinder extends Phaser.Scene {
             color: "#00ff00",
             backgroundColor: "#222"
         }).setInteractive().on("pointerdown", () => this.answer())
+        this.counterText = this.add.text(400, 570, "", {
+            fontFamily: "monospace",
+            fontSize: "18px",
+            color: "#ffffff"
+        }).setOrigin(0.5)
 
         this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
 
@@ -42,6 +47,8 @@ export default class CodeFinder extends Phaser.Scene {
         const snippet = this.snippets[this.currentIndex].snippet
         this.displayArea.setText("")
         this.typingIndex = 0
+
+        this.counterText.setText(`Snippet ${this.currentIndex + 1} / ${this.snippets.length}`)
 
         this.time.addEvent({
             delay: 25,
