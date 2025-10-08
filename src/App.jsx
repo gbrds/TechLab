@@ -47,7 +47,7 @@ function App() {
       name: 'UX', 
       unlocked: true,  
       progress: completedGames.UX ? passThreshold : 0, 
-      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked } 
+      icons: { unlocked: UXLocked, hover: UXHover, locked: UXLocked } 
     },
     { 
       id: 2, 
