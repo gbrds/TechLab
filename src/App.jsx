@@ -27,7 +27,7 @@ import ICTUnlocked from './svg/ICT_Unlocked.svg';
 function App() {
   const passThreshold = 4;
   const baseFolders = [
-    { id: 1, unlocked: true,  progress: 0, icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked } },
+    { id: 1, unlocked: true,  progress: 0, icons: { unlocked: UXLocked, hover: UXHover, locked: UXLocked } },
     { id: 2, unlocked: false, progress: 0, icons: { unlocked: DevUnlocked, hover: DevHover, locked: DevLocked } },
     { id: 3, unlocked: false, progress: 0, icons: { unlocked: SusUnlocked, hover: SusHover, locked: SusLocked } },
     { id: 4, unlocked: false, progress: 0, icons: { unlocked: ITUnlocked,  hover: ITHover, locked: ITLocked  } },

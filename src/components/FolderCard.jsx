@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import './FolderCard.css';
 
-function FolderCard({ folder }) {
+function FolderCard({ folder, onClick }) {
   const [isHovered, setIsHovered] = useState(false);
 
-  // 1) Track folder artwork (UX/Dev/IT/etc.)
+  // Track folder artwork (UX/Dev/IT/etc.)
   const folderImageSrc = useMemo(() => {
     if (!folder?.icons) return undefined;
     if (isHovered && folder.icons.hover) return folder.icons.hover;
@@ -12,7 +12,7 @@ function FolderCard({ folder }) {
                            : (folder.icons.locked || folder.icons.unlocked);
   }, [folder, isHovered]);
 
-  // 2) Status artwork (locked/unlocked/completed/failed) shown under the folder
+  // Status artwork (locked/unlocked/completed/failed) shown under the folder
   const statusImageSrc = useMemo(() => {
     if (!folder?.statusIcons) return undefined;
     return folder.statusIcons[folder.status] || folder.statusIcons.locked;
@@ -21,15 +21,26 @@ function FolderCard({ folder }) {
   // Debug: helps verify which SVG is used for each folder on render/hover
   if (process.env.NODE_ENV !== 'production') {
     // eslint-disable-next-line no-console
-    console.debug('[FolderCard] render', { id: folder.id, status: folder.status, hovered: isHovered, folderSrc: folderImageSrc, statusSrc: statusImageSrc });
+    console.debug('[FolderCard] render', { 
+      id: folder.id, 
+      status: folder.status, 
+      progress: folder.progress,
+      hovered: isHovered, 
+      folderSrc: folderImageSrc, 
+      statusSrc: statusImageSrc 
+    });
   }
+
+  const isClickable = folder.unlocked && folder.status !== 'completed';
 
   return (
     <div className="folder-card">
       <div
-        className={`folder-container ${folder.unlocked ? 'unlocked' : 'locked'}`}
+        className={`folder-container ${folder.unlocked ? 'unlocked' : 'locked'} ${isClickable ? 'clickable' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onClick={onClick}
+        style={{ cursor: isClickable ? 'pointer' : 'default' }}
       >
         {folderImageSrc && (
           <img className="folder-svg" src={folderImageSrc} alt={folder.title} draggable={false} />
