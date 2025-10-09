@@ -84,27 +84,38 @@ export default class SignalBooster extends Phaser.Scene {
     this.signalDots = [];
 
     // add blocks
-    level.blocks.forEach(b => {
-      const x = this.gridOffsetX + b.x * this.step + this.tileSize / 2;
-      const y = this.gridOffsetY + b.y * this.step + this.tileSize / 2;
-      const block = this.add.image(x, y, "block").setDisplaySize(55, 55).setDepth(0.5);
-      block.gridX = b.x; block.gridY = b.y;
-      this.blocks.push(block);
-    });
+
+level.blocks.forEach(b => {
+  const x = this.gridOffsetX + b.x * this.step + this.tileSize / 2;
+  const y = this.gridOffsetY + b.y * this.step + this.tileSize / 2;
+
+  // background rectan
+ 
+  const block = this.add.image(x, y, "block")
+    .setDisplaySize(40, 40)
+    .setDepth(0.5);
+
+  block.gridX = b.x;
+  block.gridY = b.y;
+
+  // group for signal blocking logic
+  this.blocks.push(block);
+});
+
 
     // add iots
     level.iots.forEach(i => {
       const x = this.gridOffsetX + i.x * this.step + this.tileSize / 2;
       const y = this.gridOffsetY + i.y * this.step + this.tileSize / 2;
       const spriteKey = i.type === "pc" ? "pc" : "phone";
-      const iot = this.add.image(x, y, spriteKey).setDisplaySize(50, 50).setDepth(0.5);
+      const iot = this.add.image(x, y, spriteKey).setDisplaySize(40, 40).setDepth(0.5);
       iot.gridX = i.x; iot.gridY = i.y; iot.type = i.type;
       this.iots.push(iot);
     });
 
     // ======= SPAWN ROUTERS IN POOL =======
     const poolX = this.gridOffsetX + this.gridSize * this.step + 80; // right side of grid
-    const poolStartY = this.gridOffsetY;
+    const poolStartY = this.gridOffsetY +120;
     const poolSpacing = 70;
 
     for (let i = 0; i < level.routerCount; i++) {
@@ -123,7 +134,7 @@ export default class SignalBooster extends Phaser.Scene {
     const posY = this.gridOffsetY + y * this.step + this.tileSize / 2;
 
     const router = this.add.image(posX, posY, "router")
-      .setDisplaySize(50, 50)
+      .setDisplaySize(30, 30)
       .setInteractive({ draggable: true });
 
     router.gridX = x; router.gridY = y;
@@ -168,7 +179,7 @@ export default class SignalBooster extends Phaser.Scene {
   // ===================== CREATE ROUTER IN POOL =====================
   createRouterPool(x, y) {
     const router = this.add.image(x, y, "router")
-      .setDisplaySize(50, 50)
+      .setDisplaySize(35, 35)
       .setInteractive({ draggable: true });
 
     router.gridX = null;
@@ -314,6 +325,8 @@ export default class SignalBooster extends Phaser.Scene {
       }
     }
     this.scoreText.setText(`Score: ${connected}/${this.iots.length}`);
+    this.scoreText.setVisible(false);
+this.totalScoreText.setVisible(false);
 
     // auto-next level if all connected
     if(connected===this.iots.length){
