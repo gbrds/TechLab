@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import CableConnectScene from "./Cable_Connect";
 
-const Cable_Connect = () => {
+const Cable_Connect = ({ onGameComplete }) => {
   const gameRef = useRef(null);
 
   useEffect(() => {
@@ -18,6 +18,13 @@ const Cable_Connect = () => {
     };
 
     gameRef.current = new Phaser.Game(config);
+    
+    // Listen for game completion events
+    gameRef.current.events.on('gameComplete', (score) => {
+      if (onGameComplete) {
+        onGameComplete(score);
+      }
+    });
 
     return () => {
       if (gameRef.current) {
@@ -25,7 +32,7 @@ const Cable_Connect = () => {
         gameRef.current = null;
       }
     };
-  }, []);
+  }, [onGameComplete]);
 
   return (
     <div

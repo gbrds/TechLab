@@ -1,9 +1,45 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Ui_Game from "../games/Ui_Game/Ui_Game.jsx";
+import StartOverlay from "./StartOverlay";
+import GameCompleted from "./GameCompleted";
 import "./UX.css";
 
 function UX() {
+  const navigate = useNavigate();
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [score, setScore] = useState(0);
+
+
+  const handleStartGame = () => {
+    setGameStarted(true);
+  };
+
+  const handleGameComplete = (finalScore) => {
+    setScore(finalScore);
+    setGameCompleted(true);
+    setGameStarted(false);
+    
+    // Update the main app state for folder progression
+    if (finalScore >= 4) {
+      // Store completion in localStorage to persist across page reloads
+      const completedGames = JSON.parse(localStorage.getItem('completedGames') || '{}');
+      completedGames.UX = true;
+      localStorage.setItem('completedGames', JSON.stringify(completedGames));
+      
+      // Don't auto-navigate, let user choose from completion modal
+      // setTimeout(() => {
+      //   // Navigate to next game (Tarkvara)
+      //   navigate('/tarkvara');
+      // }, 5000);
+    }
+  };
+
+  const handleBackToHome = () => {
+    navigate('/');
+  };
+
   return (
     <div className="page-container">
       {/* HEADER */}
@@ -52,21 +88,36 @@ function UX() {
             </p>
             <h3>Missioon</h3>
             <p>
-              Ülesande kirjeldus siia.
+              Lohista UX/UI mõisted õigetesse etappidesse. Igasse etappi sobitub täpselt kolm mõistet.
             </p>
           </div>
         </div>
 
-        {/* Game - wider */}
-        <div
-          className="game-section"
-          style={{
-            flex: 2,
-            minWidth: "900px",
-            minHeight: "780px", // tall enough for cards + drop zones
-          }}
-        >
-          <Ui_Game />
+        {/* Mängupaneel */}
+        <div className="game-section">
+          {!gameStarted && !gameCompleted && (
+            <StartOverlay 
+              onStart={handleStartGame}
+            />
+          )}
+          
+          {gameStarted && !gameCompleted && (
+            <Ui_Game onGameComplete={handleGameComplete} />
+          )}
+          
+          {gameCompleted && (
+            <GameCompleted 
+              onBackToGame={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+                navigate('/');
+              }}
+              onTryAgain={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

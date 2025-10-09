@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import AlertBanner from "./components/AlertBanner";
@@ -38,21 +37,39 @@ function Home() {
   const navigate = useNavigate();
   const passThreshold = 4;
 
-  const [completedGames, setCompletedGames] = useState({
-    UX: false,
-    Dev: false,
-    Sus: false,
-    IT: false,
-    ICT: false
+  const [completedGames, setCompletedGames] = useState(() => {
+    // Load completed games from localStorage on component mount
+    const saved = localStorage.getItem('completedGames');
+    return saved ? JSON.parse(saved) : {
+      UX: false,
+      Dev: false,
+      Sus: false,
+      IT: false,
+      ICT: false
+    };
   });
 
   const completedCount = Object.values(completedGames).filter(Boolean).length;
+
+  // Listen for localStorage changes to update completed games
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem('completedGames');
+      if (saved) {
+        setCompletedGames(JSON.parse(saved));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Base folder setup with routes
   const baseFolders = [
     { 
       id: 1, name: 'UX', route: '/ux-ui', unlocked: true, progress: completedGames.UX ? passThreshold : 0, 
-      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked } 
+      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked },
+      showLockedIcon: !completedGames.UX // Show locked icon until completed
     },
     { 
       id: 2, name: 'Dev', route: '/tarkvara', unlocked: completedGames.UX, progress: completedGames.Dev ? passThreshold : 0, 
@@ -76,11 +93,14 @@ function Home() {
     let status = f.unlocked ? 'unlocked' : 'locked';
     if (f.progress >= passThreshold) status = 'completed';
 
+    // Update folder icon based on completion status
     const updatedIcons = { ...f.icons };
     if (f.progress >= passThreshold) {
+      // When completed, show unlocked icon
       updatedIcons.unlocked = f.icons.unlocked;
     } else {
-      updatedIcons.unlocked = f.icons.unlocked;
+      // When not completed, show locked icon even if unlocked
+      updatedIcons.unlocked = f.icons.locked;
     }
 
     return {
@@ -98,6 +118,8 @@ function Home() {
 
   const [showGameFrame, setShowGameFrame] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
+  
+  // State for completion modal
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   // Game completion
@@ -107,10 +129,20 @@ function Home() {
       const gameName = gameNames[folderId];
       if (gameName) {
         setCompletedGames(prev => {
-          const newState = { ...prev, [gameName]: true };
-          if (Object.values(newState).every(Boolean)) {
-            setTimeout(() => setShowCompletionModal(true), 500);
+          const newState = {
+            ...prev,
+            [gameName]: true
+          };
+          
+          // Check if all games are completed
+          const allCompleted = Object.values(newState).every(Boolean);
+          if (allCompleted) {
+            // Show completion modal after a short delay
+            setTimeout(() => {
+              setShowCompletionModal(true);
+            }, 500);
           }
+          
           return newState;
         });
       }
@@ -135,7 +167,10 @@ function Home() {
     setCurrentGameId(null);
   };
 
-  const closeCompletionModal = () => setShowCompletionModal(false);
+  // Function to close completion modal
+  const closeCompletionModal = () => {
+    setShowCompletionModal(false);
+  };
 
   return (
     <div style={{ padding: "2rem", background: "#160C21", minHeight: "100vh" }}>
@@ -146,11 +181,16 @@ function Home() {
         <ProgressPanel completedCount={completedCount} />
       </div>
 
+
       {showGameFrame && (
         <GameFrame folderId={currentGameId} onGameComplete={handleGameComplete} onClose={closeGameFrame} />
       )}
 
-      <CompletionModal isOpen={showCompletionModal} onClose={closeCompletionModal} />
+      {/* Completion Modal */}
+      <CompletionModal 
+        isOpen={showCompletionModal}
+        onClose={closeCompletionModal}
+      />
     </div>
   );
 }
