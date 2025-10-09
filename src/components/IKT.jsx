@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SignalBoosterGame from "../games/signalBooster/signalBooster.jsx";
 import StartOverlay from "./StartOverlay";
+import GameCompleted from "./GameCompleted";
 import "./UX.css"; 
 
 function IKT() {
@@ -20,12 +21,18 @@ function IKT() {
     setGameCompleted(true);
     setGameStarted(false);
     
-    // This is the last game, so show completion message
+    // Update the main app state for folder progression
     if (finalScore >= 4) {
-      setTimeout(() => {
-        // Navigate back to home with all games completed
-        navigate('/');
-      }, 3000);
+      // Store completion in localStorage to persist across page reloads
+      const completedGames = JSON.parse(localStorage.getItem('completedGames') || '{}');
+      completedGames.ICT = true;
+      localStorage.setItem('completedGames', JSON.stringify(completedGames));
+      
+      // Don't auto-navigate, let user choose from completion modal
+      // setTimeout(() => {
+      //   // Navigate back to home with all games completed
+      //   navigate('/');
+      // }, 5000);
     }
   };
 
@@ -77,26 +84,17 @@ function IKT() {
           )}
           
           {gameCompleted && (
-            <div className="completion-message">
-              <h2>Mäng lõpetatud!</h2>
-              <p>Teie tulemus: {score}/5</p>
-              {score >= 4 ? (
-                <div className="success-message">
-                  <p>🎉 Palju õnne! Olete lõpetanud kõik mängud!</p>
-                  <p>Suunatakse tagasi pealehele...</p>
-                </div>
-              ) : (
-                <div className="retry-message">
-                  <p>❌ Proovige uuesti, et lõpetada kõik mängud.</p>
-                  <button onClick={() => {
-                    setGameCompleted(false);
-                    setGameStarted(false);
-                  }} className="retry-button">
-                    Proovi uuesti
-                  </button>
-                </div>
-              )}
-            </div>
+            <GameCompleted 
+              onBackToGame={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+                navigate('/');
+              }}
+              onTryAgain={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+              }}
+            />
           )}
         </div>
       </div>

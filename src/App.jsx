@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
 import GameFrame from "./GameFrame";
@@ -38,21 +38,39 @@ function Home() {
   const navigate = useNavigate();
   const passThreshold = 4;
 
-  const [completedGames, setCompletedGames] = useState({
-    UX: false,
-    Dev: false,
-    Sus: false,
-    IT: false,
-    ICT: false
+  const [completedGames, setCompletedGames] = useState(() => {
+    // Load completed games from localStorage on component mount
+    const saved = localStorage.getItem('completedGames');
+    return saved ? JSON.parse(saved) : {
+      UX: false,
+      Dev: false,
+      Sus: false,
+      IT: false,
+      ICT: false
+    };
   });
 
   const completedCount = Object.values(completedGames).filter(Boolean).length;
+
+  // Listen for localStorage changes to update completed games
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const saved = localStorage.getItem('completedGames');
+      if (saved) {
+        setCompletedGames(JSON.parse(saved));
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
 
   // Base folder setup with routes
   const baseFolders = [
     { 
       id: 1, name: 'UX', route: '/ux-ui', unlocked: true, progress: completedGames.UX ? passThreshold : 0, 
-      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked } 
+      icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked },
+      showLockedIcon: !completedGames.UX // Show locked icon until completed
     },
     { 
       id: 2, name: 'Dev', route: '/tarkvara', unlocked: completedGames.UX, progress: completedGames.Dev ? passThreshold : 0, 
@@ -77,7 +95,11 @@ function Home() {
     if (f.progress >= passThreshold) status = 'completed';
 
     const updatedIcons = { ...f.icons };
-    if (f.progress >= passThreshold) {
+    
+    // For UX folder, show locked icon until completed
+    if (f.id === 1 && f.showLockedIcon) {
+      updatedIcons.unlocked = f.icons.locked; // Use locked icon for unlocked state
+    } else if (f.progress >= passThreshold) {
       updatedIcons.unlocked = f.icons.unlocked;
     } else {
       updatedIcons.unlocked = f.icons.unlocked;
@@ -145,6 +167,7 @@ function Home() {
         <FolderGrid folders={folders} onFolderClick={handleFolderClick} />
         <ProgressPanel completedCount={completedCount} />
       </div>
+
 
       {showGameFrame && (
         <GameFrame folderId={currentGameId} onGameComplete={handleGameComplete} onClose={closeGameFrame} />

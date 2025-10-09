@@ -149,17 +149,27 @@ export default class Ui_GameScene extends Phaser.Scene {
   // --- Method to check answers
   checkAnswers() {
     let correctCount = 0;
+    let totalWords = 0;
+    
+    // Count all draggable text objects
     this.children.list.forEach(child => {
-      if (child.data && child.data.get("placedIn") === child.data.get("correct")) {
-        correctCount++;
+      if (child.data && child.data.get("correct")) {
+        totalWords++;
+        if (child.data.get("placedIn") === child.data.get("correct")) {
+          correctCount++;
+        }
       }
     });
 
     this.score = correctCount;
-    if (this.scoreText) this.scoreText.setText(`${correctCount}/${this.wordsData.length} correct`);
+    if (this.scoreText) this.scoreText.setText(`${correctCount}/${totalWords} correct`);
     this.events.emit("updateScore", correctCount);
 
-    if (correctCount === this.wordsData.length) {
+    // Emit game completion event with score (0-5 scale)
+    const scoreOutOfFive = Math.round((correctCount / totalWords) * 5);
+    this.events.emit("gameComplete", scoreOutOfFive);
+
+    if (correctCount === totalWords) {
       const winText = this.add.text(500, 300, "🎉 All Correct!", {
         fontSize: "32px",
         color: "#00ff00",

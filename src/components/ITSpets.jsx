@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import CableConnectScene from "../games/Cable_Connect/Cable_Connect.jsx";
 import StartOverlay from "./StartOverlay";
+import GameCompleted from "./GameCompleted";
 import "./UX.css"; // UX stiili kasutamine
 
 function ITSpetsialist() {
@@ -20,12 +21,18 @@ function ITSpetsialist() {
     setGameCompleted(true);
     setGameStarted(false);
     
-    // If score is 4 or higher, unlock next game after a delay
+    // Update the main app state for folder progression
     if (finalScore >= 4) {
-      setTimeout(() => {
-        // Navigate to next game (IKT)
-        navigate('/IKT');
-      }, 2000);
+      // Store completion in localStorage to persist across page reloads
+      const completedGames = JSON.parse(localStorage.getItem('completedGames') || '{}');
+      completedGames.IT = true;
+      localStorage.setItem('completedGames', JSON.stringify(completedGames));
+      
+      // Don't auto-navigate, let user choose from completion modal
+      // setTimeout(() => {
+      //   // Navigate to next game (IKT)
+      //   navigate('/IKT');
+      // }, 5000);
     }
   };
 
@@ -77,26 +84,17 @@ function ITSpetsialist() {
           )}
           
           {gameCompleted && (
-            <div className="completion-message">
-              <h2>Mäng lõpetatud!</h2>
-              <p>Teie tulemus: {score}/5</p>
-              {score >= 4 ? (
-                <div className="success-message">
-                  <p>✅ Suurepärane! Järgmine mäng on nüüd avatud.</p>
-                  <p>Suunatakse järgmise mängu juurde...</p>
-                </div>
-              ) : (
-                <div className="retry-message">
-                  <p>❌ Proovige uuesti, et avada järgmine mäng.</p>
-                  <button onClick={() => {
-                    setGameCompleted(false);
-                    setGameStarted(false);
-                  }} className="retry-button">
-                    Proovi uuesti
-                  </button>
-                </div>
-              )}
-            </div>
+            <GameCompleted 
+              onBackToGame={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+                navigate('/');
+              }}
+              onTryAgain={() => {
+                setGameCompleted(false);
+                setGameStarted(false);
+              }}
+            />
           )}
         </div>
       </div>
