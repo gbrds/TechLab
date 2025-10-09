@@ -1,12 +1,10 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
-import SnakeGame from "./games/snake/SnakeGame";
-import CodeFinder from "./games/softDevGame/softDevGame.js";
-// PLACEHOLDER: Your teammates will import their game scenes here
-// import UXGame from "./games/ux/UXGame";
-// import SusGame from "./games/sus/SusGame";
-// import ITGame from "./games/it/ITGame";
-// import ICTGame from "./games/ict/ICTGame";
+import UIGame from "./games/UI_Game/UI_Game.js";
+import SoftDevGame from "./games/softDevGame/softDevGame.js";
+import CatchBreach from "./games/catchBreach/catchBreach.js";
+import SignalBooster from "./games/signalBooster/signalBooster.js";
+import CableConnect from "./games/Cable_Connect/Cable_Connect.js";
 
 export default function GameFrame({ folderId, onGameComplete, onClose }) {
   const gameRef = useRef(null);
@@ -15,14 +13,14 @@ export default function GameFrame({ folderId, onGameComplete, onClose }) {
   useEffect(() => {
     // Map folder IDs to game scenes
     const gameScenes = {
-      1: SnakeGame,    // UX game (currently using Snake as placeholder)
-      2: CodeFinder,   // Dev game - Code Finder
-      3: SnakeGame,    // Sus game (placeholder)
-      4: SnakeGame,    // IT game (placeholder)
-      5: SnakeGame     // ICT game (placeholder)
+      1: UIGame,           // UX game - UI_Game
+      2: SoftDevGame,      // Dev game - Software Development Game
+      3: CatchBreach,      // Sus game - Catch Breach (security/sustainability)
+      4: SignalBooster,    // IT game - Signal Booster
+      5: CableConnect      // ICT game - Cable Connect
     };
 
-    const GameScene = gameScenes[folderId] || SnakeGame;
+    const GameScene = gameScenes[folderId] || SoftDevGame;
 
     const config = {
       type: Phaser.AUTO,
@@ -33,8 +31,7 @@ export default function GameFrame({ folderId, onGameComplete, onClose }) {
       // Pass callbacks to game scenes via config
       callbacks: {
         preBoot: (game) => {
-          // PLACEHOLDER: Your teammates need to listen for this event in their game scenes
-          // When the game ends, they should emit: this.game.events.emit('gameComplete', score);
+          // Listen for game completion events from all game scenes
           game.events.on('gameComplete', (score) => {
             console.log(`Game ${folderId} completed with score:`, score);
             onGameComplete?.(folderId, score);
@@ -98,7 +95,7 @@ export default function GameFrame({ folderId, onGameComplete, onClose }) {
         }}
       />
 
-      {/* PLACEHOLDER: Instructions for your teammates */}
+      {/* Game instructions */}
       <div style={{
         marginTop: '20px',
         padding: '15px',

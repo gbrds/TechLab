@@ -1,0 +1,139 @@
+/* Taust */
+.page-container {
+  background-color: #160c21;
+  color: white;
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Pealkirja ala */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Tagasinupp */
+.back-button {
+  background: #ff8a00;
+  border: none;
+  color: #1d142a;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  margin-bottom: 0.6rem;
+  transition: background 0.2s ease-in-out;
+}
+
+.back-button:hover {
+  background: #ffaa33;
+}
+
+/* Pealkiri */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.canvas-icon {
+  font-size: 1.6rem;
+}
+
+.popup-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: white;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.popup-timer {
+  font-size: 1rem;
+  color: #b0b0b0;
+  margin-top: 0.4rem;
+}
+
+/* --- Peaosa --- */
+.popup-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  width: 100%;
+}
+
+/* --- Vasak pool --- */
+.gray-rectangle {
+  background-color: #0c101e;
+  border: 2px solid #2c3749;
+  border-radius: 12px;
+  padding: 1.5rem;
+  flex: 1;
+  height: 550px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.info-block {
+  text-align: left;
+  color: #e0e0e0;
+}
+
+.info-block h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.info-block p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #d0d0d0;
+  margin-bottom: 1rem;
+}
+
+/* Parem pool */
+.game-section {
+  background-color: #0c101e;
+  border: 2px solid #2c3749;
+  border-radius: 12px;
+  flex: 2;
+  height: 598px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-placeholder {
+  color: #b0b0b0;
+  font-style: italic;
+  text-align: center;
+  font-size: 1rem;
+}
+
+
+@media (max-width: 1024px) {
+  .popup-content {
+    flex-direction: column;
+  }
+
+  .gray-rectangle,
+  .game-section {
+    width: 100%;
+    height: auto;
+  }
+}
