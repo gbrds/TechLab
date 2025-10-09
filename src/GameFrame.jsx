@@ -5,6 +5,13 @@ import SoftDevGame from "./games/softDevGame/softDevGame";
 import CatchBreach from "./games/catchBreach/catchBreach";
 import SignalBooster from "./games/signalBooster/signalBooster";
 import CableConnect from "./games/Cable_Connect/Cable_Connect";
+import SnakeGame from "./games/snake/SnakeGame";
+import CodeFinder from "./games/softDevGame/softDevGame.js";
+// PLACEHOLDER: Your teammates will import their game scenes here
+// import UXGame from "./games/ux/UXGame";
+// import SusGame from "./games/sus/SusGame";
+// import ITGame from "./games/it/ITGame";
+// import ICTGame from "./games/ict/ICTGame";
 
 export default function GameFrame({ folderId, onGameComplete, onClose }) {
   const gameRef = useRef(null);

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
-
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import AlertBanner from "./components/AlertBanner";
@@ -94,15 +93,14 @@ function Home() {
     let status = f.unlocked ? 'unlocked' : 'locked';
     if (f.progress >= passThreshold) status = 'completed';
 
+    // Update folder icon based on completion status
     const updatedIcons = { ...f.icons };
-    
-    // For UX folder, show locked icon until completed
-    if (f.id === 1 && f.showLockedIcon) {
-      updatedIcons.unlocked = f.icons.locked; // Use locked icon for unlocked state
-    } else if (f.progress >= passThreshold) {
+    if (f.progress >= passThreshold) {
+      // When completed, show unlocked icon
       updatedIcons.unlocked = f.icons.unlocked;
     } else {
-      updatedIcons.unlocked = f.icons.unlocked;
+      // When not completed, show locked icon even if unlocked
+      updatedIcons.unlocked = f.icons.locked;
     }
 
     return {
@@ -120,6 +118,8 @@ function Home() {
 
   const [showGameFrame, setShowGameFrame] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
+  
+  // State for completion modal
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
   // Game completion
@@ -129,10 +129,20 @@ function Home() {
       const gameName = gameNames[folderId];
       if (gameName) {
         setCompletedGames(prev => {
-          const newState = { ...prev, [gameName]: true };
-          if (Object.values(newState).every(Boolean)) {
-            setTimeout(() => setShowCompletionModal(true), 500);
+          const newState = {
+            ...prev,
+            [gameName]: true
+          };
+          
+          // Check if all games are completed
+          const allCompleted = Object.values(newState).every(Boolean);
+          if (allCompleted) {
+            // Show completion modal after a short delay
+            setTimeout(() => {
+              setShowCompletionModal(true);
+            }, 500);
           }
+          
           return newState;
         });
       }
@@ -157,7 +167,10 @@ function Home() {
     setCurrentGameId(null);
   };
 
-  const closeCompletionModal = () => setShowCompletionModal(false);
+  // Function to close completion modal
+  const closeCompletionModal = () => {
+    setShowCompletionModal(false);
+  };
 
   return (
     <div style={{ padding: "2rem", background: "#160C21", minHeight: "100vh" }}>
@@ -173,7 +186,11 @@ function Home() {
         <GameFrame folderId={currentGameId} onGameComplete={handleGameComplete} onClose={closeGameFrame} />
       )}
 
-      <CompletionModal isOpen={showCompletionModal} onClose={closeCompletionModal} />
+      {/* Completion Modal */}
+      <CompletionModal 
+        isOpen={showCompletionModal}
+        onClose={closeCompletionModal}
+      />
     </div>
   );
 }

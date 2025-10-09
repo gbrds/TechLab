@@ -10,7 +10,7 @@ export default function CodeFinderView({ onGameComplete }) {
             type: Phaser.AUTO,
             width: 1150,
             height: 590,
-            backgroundColor: "#111",
+            backgroundColor: "#0c101e",
             parent: gameRef.current,
             scene: [CodeFinder],
             dom: { createContainer: true }
