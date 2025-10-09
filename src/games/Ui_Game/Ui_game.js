@@ -7,15 +7,10 @@ export default class Ui_GameScene extends Phaser.Scene {
   }
 
   create() {
-    // --- Background
+    // --- Canvas dimensions
+    const screenWidth = 1190;
+    const screenHeight = 600;
     this.cameras.main.setBackgroundColor(0x0f0f1a);
-
-    // --- Score text
-    this.scoreText = this.add.text(500, 550, `0/${15} correct`, {
-      fontSize: "24px",
-      color: "#ffffff",
-      fontStyle: "bold",
-    }).setOrigin(0.5);
 
     // --- Game data
     this.wordsData = [
@@ -36,42 +31,83 @@ export default class Ui_GameScene extends Phaser.Scene {
       { text: "Kasutajalooad", correct: "Defineerimine" },
     ];
 
-    // --- Drop zones
+    // --- Drop Zones Setup
+    const zoneWidth = 210;
+    const zoneHeight = 330;
+    const radius = 24;
+    const totalZones = 5;
+    const spacing = 230;
+    const totalWidth = (totalZones - 1) * spacing + zoneWidth;
+    const startX = (screenWidth - totalWidth) / 2 + zoneWidth / 2 - 30;
+    const yPos = 350;
+
     this.dropZones = [
-      { label: "Empatiseerimine", x: 120, y: 420, color: 0x0074d9 },
-      { label: "Defineerimine", x: 320, y: 420, color: 0xff4136 },
-      { label: "Ideestamine", x: 520, y: 420, color: 0xffdc00 },
-      { label: "Prototüüpimine", x: 720, y: 420, color: 0x2ecc40 },
-      { label: "Testimine", x: 920, y: 420, color: 0xb10dc9 },
+      { label: "Empatiseerimine", subtitle: "Vajaduste ja probleemide mõistmine", color: 0x8b5cf6 },
+      { label: "Defineerimine", subtitle: "Probleemi sõnastamine", color: 0x10b981 },
+      { label: "Ideestamine", subtitle: "Ideede genereerimine", color: 0xfacc15 },
+      { label: "Prototüüpimine", subtitle: "Ideede realiseerimine", color: 0xef4444 },
+      { label: "Testimine", subtitle: "Lahenduste valideerimine", color: 0xf97316 },
     ];
 
-    // --- Create drop zones visually
-    this.dropZones.forEach(zone => {
-      const rect = this.add.rectangle(zone.x, zone.y, 160, 160, zone.color, 0.4)
-        .setStrokeStyle(3, 0xffffff)
-        .setInteractive({ dropZone: true });
+    this.zoneStacks = {};
 
-      const label = this.add.text(zone.x, zone.y + 90, zone.label, {
-        fontSize: "14px",
-        color: "#ffffff",
-        align: "center",
+    this.dropZones.forEach((zone, i) => {
+      const x = startX + i * spacing;
+      zone.x = x;
+      zone.y = yPos;
+
+      const rect = this.add.graphics();
+      rect.lineStyle(2, zone.color, 1);
+      rect.fillStyle(Phaser.Display.Color.GetColor(20, 22, 33), 0.35);
+      rect.strokeRoundedRect(x - zoneWidth / 2, yPos - zoneHeight / 2, zoneWidth, zoneHeight, radius);
+
+      const drop = this.add.zone(x, yPos, zoneWidth, zoneHeight).setRectangleDropZone(zoneWidth, zoneHeight);
+      drop.setData("color", zone.color);
+      drop.label = zone.label;
+      zone.area = drop;
+
+      this.add.text(x, yPos - zoneHeight / 2 + 25, zone.label, {
+        fontSize: "18px",
+        color: Phaser.Display.Color.IntegerToColor(zone.color).rgba,
+        fontStyle: "bold",
       }).setOrigin(0.5);
 
-      rect.label = zone.label;
-      zone.area = rect;
+      this.add.text(x, yPos - zoneHeight / 2 + 45, zone.subtitle, {
+        fontSize: "13px",
+        color: "#a0aec0",
+        align: "center",
+        wordWrap: { width: zoneWidth - 10 },
+      }).setOrigin(0.5);
+
+      this.zoneStacks[zone.label] = [];
     });
 
-    // --- Create draggable words
+    // --- Score text
+    this.scoreText = this.add.text(screenWidth / 2 - 80, yPos + zoneHeight / 2 + 40, `0/${this.wordsData.length} õigesti`, {
+      fontSize: "22px",
+      color: "#ffffff",
+      fontStyle: "bold",
+    }).setOrigin(0.5);
+
+    // --- Draggable cards
     Phaser.Utils.Array.Shuffle(this.wordsData);
+    const cardsPerRow = 5;
+    const cardSpacingX = 180;
+    const cardSpacingY = 60;
+    const totalCardWidth = cardsPerRow * cardSpacingX;
+    const startCardX = (screenWidth - totalCardWidth) / 2 + cardSpacingX / 2;
+    const startCardY = 20; // moved higher to avoid drop zones
+
     this.wordsData.forEach((word, index) => {
-      const x = 120 + (index % 5) * 180;
-      const y = 80 + Math.floor(index / 5) * 60;
+      const x = startCardX + (index % cardsPerRow) * cardSpacingX;
+      const y = startCardY + Math.floor(index / cardsPerRow) * cardSpacingY;
 
       const card = this.add.text(x, y, word.text, {
         fontSize: "16px",
         color: "#ffffff",
         backgroundColor: "#1e90ff",
-        padding: { x: 10, y: 5 },
+        padding: { x: 10, y: 6 },
+        fontFamily: "Arial",
       })
         .setOrigin(0.5)
         .setInteractive({ draggable: true });
@@ -79,62 +115,51 @@ export default class Ui_GameScene extends Phaser.Scene {
       card.data = new Phaser.Data.DataManager(card);
       card.data.set("correct", word.correct);
       card.data.set("placedIn", null);
+      card.originalX = x;
+      card.originalY = y;
     });
 
-    // --- Drag events
-    this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-      gameObject.x = dragX;
-      gameObject.y = dragY;
+    // --- Drag logic
+    this.input.on("drag", (pointer, obj, dragX, dragY) => {
+      obj.x = dragX;
+      obj.y = dragY;
     });
 
-    this.input.on("dragenter", (pointer, gameObject, dropZone) => {
-      dropZone.setFillStyle(dropZone.fillColor, 0.7);
+    this.input.on("dragend", (pointer, obj, dropped) => {
+      if (!dropped) {
+        obj.x = obj.originalX;
+        obj.y = obj.originalY;
+      }
     });
 
-    this.input.on("dragleave", (pointer, gameObject, dropZone) => {
-      dropZone.setFillStyle(dropZone.fillColor, 0.4);
-    });
+    // --- Drop behavior
+    this.input.on("drop", (pointer, obj, zone) => {
+      const label = zone.label;
+      const prevZone = obj.data.get("placedIn");
 
-    this.input.on("drop", (pointer, gameObject, dropZone) => {
-      if (!dropZone.children) dropZone.children = [];
-
-      // Remove from old drop zone
-      if (gameObject.data.get("placedIn")) {
-        const oldZone = this.dropZones.find(z => z.label === gameObject.data.get("placedIn"));
-        if (oldZone && oldZone.area.children) {
-          oldZone.area.children = oldZone.area.children.filter(child => child !== gameObject);
-          const spacing = 30;
-          const total = oldZone.area.children.length;
-          oldZone.area.children.forEach((child, index) => {
-            child.x = oldZone.area.x;
-            child.y = oldZone.area.y - ((total - 1) * spacing) / 2 + index * spacing;
-          });
-        }
+      if (prevZone && this.zoneStacks[prevZone]) {
+        this.zoneStacks[prevZone] = this.zoneStacks[prevZone].filter(c => c !== obj);
       }
 
-      // Add to new drop zone
-      dropZone.children.push(gameObject);
-      gameObject.data.set("placedIn", dropZone.label);
+      const stack = this.zoneStacks[label];
+      stack.push(obj);
 
-      const spacing = 30;
-      const total = dropZone.children.length;
-      dropZone.children.forEach((child, index) => {
-        child.x = dropZone.x;
-        child.y = dropZone.y - ((total - 1) * spacing) / 2 + index * spacing;
+      const zoneHeight = zone.input.hitArea.height;
+      const paddingTop = 90;
+      const paddingBottom = 20;
+      const availableHeight = zoneHeight - paddingTop - paddingBottom;
+      const spacingY = Math.min(35, availableHeight / Math.max(stack.length, 1));
+
+      stack.forEach((card, i) => {
+        card.x = zone.x;
+        card.y = zone.y - zoneHeight / 2 + paddingTop + i * spacingY;
       });
 
-      dropZone.setFillStyle(dropZone.fillColor, 0.4);
+      obj.data.set("placedIn", label);
     });
 
-    this.input.on("dragend", (pointer, gameObject, dropped) => {
-      if (!dropped) {
-        gameObject.x = gameObject.input.dragStartX;
-        gameObject.y = gameObject.input.dragStartY;
-      }
-    });
-
-    // --- Check answers button inside Phaser
-    this.checkButton = this.add.text(500, 500, "Check Answers", {
+    // --- Check answers button aligned with score text
+    this.checkButton = this.add.text(screenWidth / 2 + 120, yPos + zoneHeight / 2 + 40, "Check Answers", {
       fontSize: "20px",
       color: "#000000",
       backgroundColor: "#ffd700",
@@ -146,13 +171,16 @@ export default class Ui_GameScene extends Phaser.Scene {
     });
   }
 
-  // --- Method to check answers
+  // --- Method to check answers (points fix applied)
   checkAnswers() {
     let correctCount = 0;
-    this.children.list.forEach(child => {
-      if (child.data && child.data.get("placedIn") === child.data.get("correct")) {
-        correctCount++;
-      }
+
+    // Ensure exactly 1 point per correctly placed draggable
+    this.wordsData.forEach(word => {
+      const placedCard = this.children.list.find(
+        child => child.data && child.text === word.text && child.data.get("placedIn") === word.correct
+      );
+      if (placedCard) correctCount += 1;
     });
 
     this.score = correctCount;
