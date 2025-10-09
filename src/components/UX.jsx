@@ -92,10 +92,14 @@ function UX() {
           
           {gameCompleted && (
             <GameCompleted 
+              description="Oled omandanud teadmised UX/UI põhimõistetest ja disainmõtlemise mudelist."
               onBackToGame={() => {
                 setGameCompleted(false);
                 setGameStarted(false);
-                navigate('/');
+                // Navigate to next game (Tarkvara) if score is high enough
+                if (score >= 4) {
+                  navigate('/tarkvara');
+                }
               }}
               onTryAgain={() => {
                 setGameCompleted(false);

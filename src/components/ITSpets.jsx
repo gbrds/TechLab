@@ -85,10 +85,14 @@ function ITSpetsialist() {
           
           {gameCompleted && (
             <GameCompleted 
+              description="Õiged kaablid ühendatud ja arvuti on töökorras."
               onBackToGame={() => {
                 setGameCompleted(false);
                 setGameStarted(false);
-                navigate('/');
+                // Navigate to next game (IKT) if score is high enough
+                if (score >= 4) {
+                  navigate('/IKT');
+                }
               }}
               onTryAgain={() => {
                 setGameCompleted(false);

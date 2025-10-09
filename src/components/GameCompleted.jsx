@@ -1,7 +1,7 @@
 import React from "react";
 import "./GameCompleted.css";
 
-const GameCompleted = ({ onBackToGame, onTryAgain }) => {
+const GameCompleted = ({ onBackToGame, onTryAgain, description }) => {
   return (
     <div className="game-completed-overlay">
       <div className="game-completed-modal">
@@ -15,11 +15,11 @@ const GameCompleted = ({ onBackToGame, onTryAgain }) => {
         </div>
 
         {/* Title */}
-        <h2 className="modal-title">Tubli töö vms!</h2>
+        <h2 className="modal-title">Tubli töö!</h2>
 
         {/* Description */}
         <p className="modal-description">
-          Lorem ipsum dolor sit amet consectetur adipiscing elit Ut et massa mi. Aliquam in hendrerit urna. Pellentesque sit amet.
+          {description}
         </p>
 
         {/* Buttons */}

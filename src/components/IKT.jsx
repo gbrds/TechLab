@@ -85,9 +85,11 @@ function IKT() {
           
           {gameCompleted && (
             <GameCompleted 
+              description="Ühendused taastatud - takistused ületatud ja signaal maksimaalne!"
               onBackToGame={() => {
                 setGameCompleted(false);
                 setGameStarted(false);
+                // Navigate back to home since this is the last game
                 navigate('/');
               }}
               onTryAgain={() => {

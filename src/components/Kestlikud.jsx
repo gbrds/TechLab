@@ -85,10 +85,14 @@ function Kestlikud() {
           
           {gameCompleted && (
             <GameCompleted 
+              description="Loodan, et viisid oma reageerimiskiiruse uuele tasemele!"
               onBackToGame={() => {
                 setGameCompleted(false);
                 setGameStarted(false);
-                navigate('/');
+                // Navigate to next game (ITSpetsialist) if score is high enough
+                if (score >= 4) {
+                  navigate('/ITSpetsialist');
+                }
               }}
               onTryAgain={() => {
                 setGameCompleted(false);

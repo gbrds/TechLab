@@ -87,10 +87,14 @@ function Tarkvara() {
           
           {gameCompleted && (
             <GameCompleted 
+              description="Said koodi lahtimuukimisega hästi hakkama."
               onBackToGame={() => {
                 setGameCompleted(false);
                 setGameStarted(false);
-                navigate('/');
+                // Navigate to next game (Kestlikud) if score is high enough
+                if (score >= 4) {
+                  navigate('/kestlikud');
+                }
               }}
               onTryAgain={() => {
                 setGameCompleted(false);

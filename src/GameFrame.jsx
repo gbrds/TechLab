@@ -5,7 +5,6 @@ import SoftDevGame from "./games/softDevGame/softDevGame";
 import CatchBreach from "./games/catchBreach/catchBreach";
 import SignalBooster from "./games/signalBooster/signalBooster";
 import CableConnect from "./games/Cable_Connect/Cable_Connect";
-import SnakeGame from "./games/snake/SnakeGame";
 import CodeFinder from "./games/softDevGame/softDevGame.js";
 // PLACEHOLDER: Your teammates will import their game scenes here
 // import UXGame from "./games/ux/UXGame";
