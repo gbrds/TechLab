@@ -125,6 +125,66 @@
   font-size: 1rem;
 }
 
+/* Completion message styles */
+.completion-message {
+  text-align: center;
+  color: white;
+  padding: 2rem;
+}
+
+.completion-message h2 {
+  color: #ff8a00;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.completion-message p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.success-message {
+  background: rgba(0, 255, 0, 0.1);
+  border: 1px solid #00ff00;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.success-message p {
+  color: #00ff00;
+  font-weight: 600;
+}
+
+.retry-message {
+  background: rgba(255, 0, 0, 0.1);
+  border: 1px solid #ff0000;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.retry-message p {
+  color: #ff0000;
+  font-weight: 600;
+}
+
+.retry-button {
+  background: #ff8a00;
+  border: none;
+  color: #1d142a;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.2s ease-in-out;
+}
+
+.retry-button:hover {
+  background: #ffaa33;
+}
+
 
 @media (max-width: 1024px) {
   .popup-content {

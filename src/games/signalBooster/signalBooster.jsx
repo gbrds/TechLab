@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import SignalBooster from "./signalBooster.js";
 
-const SignalBoosterGame = () => {
+const SignalBoosterGame = ({ onGameComplete }) => {
   const gameRef = useRef(null);
 
   useEffect(() => {
@@ -17,6 +17,13 @@ const SignalBoosterGame = () => {
       };
 
       gameRef.current = new Phaser.Game(config);
+      
+      // Listen for game completion events
+      gameRef.current.events.on('gameComplete', (score) => {
+        if (onGameComplete) {
+          onGameComplete(score);
+        }
+      });
     }
 
     // Cleanup on unmount
@@ -26,7 +33,7 @@ const SignalBoosterGame = () => {
         gameRef.current = null;
       }
     };
-  }, []);
+  }, [onGameComplete]);
 
   return <div id="phaser-container" style={{ width: "100%", height: "100%", margin: "0 auto", justifyContent: "center", alignItems: "center", display: "flex" }} />;
 };

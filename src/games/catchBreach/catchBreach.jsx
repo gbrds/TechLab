@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react"
 import Phaser from "phaser"
 import CatchTheBreach from "./catchBreach"
 
-export default function CatchBreachView() {
+export default function CatchBreachView({ onGameComplete }) {
     const gameRef = useRef(null)
 
     useEffect(() => {
@@ -70,6 +70,13 @@ export default function CatchBreachView() {
                             fill: "#fff",
                             align: "center"
                         })
+                        
+                        // Emit game completion event
+                        if (onGameComplete) {
+                            setTimeout(() => {
+                                onGameComplete(finalScore);
+                            }, 2000);
+                        }
                     }
                 })
 
@@ -96,7 +103,7 @@ export default function CatchBreachView() {
             game.destroy(true)
             gameLogic?.stopGame()
         }
-    }, [])
+    }, [onGameComplete])
 
     return (
         <div

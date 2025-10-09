@@ -1,9 +1,34 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import CatchBreachScene from "../games/catchBreach/catchBreach.jsx";
+import StartOverlay from "./StartOverlay";
 import "./UX.css";
 
 function Kestlikud() {
+  const navigate = useNavigate();
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameCompleted, setGameCompleted] = useState(false);
+  const [score, setScore] = useState(0);
+
+
+  const handleStartGame = () => {
+    setGameStarted(true);
+  };
+
+  const handleGameComplete = (finalScore) => {
+    setScore(finalScore);
+    setGameCompleted(true);
+    setGameStarted(false);
+    
+    // If score is 4 or higher, unlock next game after a delay
+    if (finalScore >= 4) {
+      setTimeout(() => {
+        // Navigate to next game (ITSpetsialist)
+        navigate('/ITSpetsialist');
+      }, 2000);
+    }
+  };
+
   return (
     <div className="page-container">
       {/* HEADER */}
@@ -34,14 +59,45 @@ function Kestlikud() {
 
             <h3>Missioon</h3>
             <p>
-                Ülesande kirjeldus siia!
+                Kaitse süsteeme turvalisuse vastu ja õpi kestlike tehnoloogiate põhimõtteid.
             </p>
           </div>
         </div>
 
         {/* Mäng */}
         <div className="game-section">
-          <CatchBreachScene />
+          {!gameStarted && !gameCompleted && (
+            <StartOverlay 
+              onStart={handleStartGame}
+            />
+          )}
+          
+          {gameStarted && !gameCompleted && (
+            <CatchBreachScene onGameComplete={handleGameComplete} />
+          )}
+          
+          {gameCompleted && (
+            <div className="completion-message">
+              <h2>Mäng lõpetatud!</h2>
+              <p>Teie tulemus: {score}/5</p>
+              {score >= 4 ? (
+                <div className="success-message">
+                  <p>✅ Suurepärane! Järgmine mäng on nüüd avatud.</p>
+                  <p>Suunatakse järgmise mängu juurde...</p>
+                </div>
+              ) : (
+                <div className="retry-message">
+                  <p>❌ Proovige uuesti, et avada järgmine mäng.</p>
+                  <button onClick={() => {
+                    setGameCompleted(false);
+                    setGameStarted(false);
+                  }} className="retry-button">
+                    Proovi uuesti
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

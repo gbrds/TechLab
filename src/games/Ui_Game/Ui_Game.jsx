@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Phaser from "phaser";
 import Ui_GameScene from "./Ui_game.js";
 
-const Ui_Game = () => {
+const Ui_Game = ({ onGameComplete }) => {
   const gameRef = useRef(null);
   const [score, setScore] = useState(0);
   const phaserGameRef = useRef(null);
@@ -28,6 +28,14 @@ const Ui_Game = () => {
           scene.events.on("updateScore", (newScore) => {
             setScore(newScore);
           });
+          
+          // Listen for game completion
+          scene.events.on("gameComplete", (finalScore) => {
+            if (onGameComplete) {
+              onGameComplete(finalScore);
+            }
+          });
+          
           clearInterval(checkSceneReady);
         }
       }, 50);
@@ -37,7 +45,7 @@ const Ui_Game = () => {
         game.destroy(true);
       };
     }
-  }, []);
+  }, [onGameComplete]);
 
   return (
     <div

@@ -1,0 +1,42 @@
+.start-overlay {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(12, 16, 30, 0.70);
+  backdrop-filter: blur(1px);
+  z-index: 1000;
+}
+
+.button-container {
+  display: flex;
+  width: 269px;
+  padding: 8px 16px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  background: var(--orange, #FF8400);
+  justify-content: center;
+  transform: translateY(50px);
+}
+
+.start-button {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.start-button:hover {
+  transform: scale(1.05);
+}
+
+.start-button:active {
+  transform: scale(0.95);
+}
+
