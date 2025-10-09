@@ -11,7 +11,7 @@ function FolderGrid({ folders, onFolderClick }) {
           folder={folder}
           onClick={() => {
             if (folder.unlocked && folder.status !== 'completed') {
-              onFolderClick?.(folder.id);
+              onFolderClick?.(folder); 
             }
           }}
         />
