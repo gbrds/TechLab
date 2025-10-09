@@ -20,10 +20,25 @@ function UX() {
         <div className="popup-timer">⏱ 00:00</div>
       </div>
 
-      {/* Sisu */}
-      <div className="popup-content">
-        {/* Info */}
-        <div className="gray-rectangle">
+      {/* CONTENT */}
+      <div
+        className="popup-content"
+        style={{
+          display: "flex",
+          gap: "20px",
+          alignItems: "flex-start", // align panels at top
+          minHeight: "780px",       // ensures enough vertical space
+        }}
+      >
+        {/* Info - narrower */}
+        <div
+          className="gray-rectangle"
+          style={{
+            flex: 1,
+            maxWidth: "380px",
+            minHeight: "780px",  // match game panel height
+          }}
+        >
           <div className="info-block">
             <h3>Eriala kirjeldus</h3>
             <p>
@@ -42,8 +57,15 @@ function UX() {
           </div>
         </div>
 
-        {/* Mängupaneel */}
-        <div className="game-section">
+        {/* Game - wider */}
+        <div
+          className="game-section"
+          style={{
+            flex: 2,
+            minWidth: "900px",
+            minHeight: "780px", // tall enough for cards + drop zones
+          }}
+        >
           <Ui_Game />
         </div>
       </div>
