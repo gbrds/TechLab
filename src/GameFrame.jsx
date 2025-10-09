@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
 import UIGame from "./games/UI_Game/UI_Game.js";
-import SoftDevGame from "./games/softDevGame/softDevGame.js";
-import CatchBreach from "./games/catchBreach/catchBreach.js";
-import SignalBooster from "./games/signalBooster/signalBooster.js";
-import CableConnect from "./games/Cable_Connect/Cable_Connect.js";
+import SoftDevGame from "./games/softDevGame/softDevGame";
+import CatchBreach from "./games/catchBreach/catchBreach";
+import SignalBooster from "./games/signalBooster/signalBooster";
+import CableConnect from "./games/Cable_Connect/Cable_Connect";
 
 export default function GameFrame({ folderId, onGameComplete, onClose }) {
   const gameRef = useRef(null);
