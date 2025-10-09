@@ -1,0 +1,113 @@
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.popup-window {
+  background: #160c21;
+  color: white;
+  width: 95%;
+  max-width: 1300px;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* header */
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+}
+
+.back-button {
+  background: none;
+  border: 1px solid #2c3749;
+  color: white;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.popup-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.popup-subtitle {
+  font-size: 0.85rem;
+  color: #bdbdbd;
+  margin-top: 0.25rem;
+}
+
+.timer-badge {
+  background: #f5a623;
+  color: black;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* Peaosa */
+.popup-content {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 2rem;
+}
+
+/* Vasak pool */
+.merged-info-box {
+  background: #0c101e;
+  border: 1px solid #2c3749;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.merged-info-box section h3 {
+  color: #ffffff;
+  margin-bottom: 0.4rem;
+}
+
+.merged-info-box section p {
+  font-size: 0.95rem;
+  color: #d3d3d3;
+  line-height: 1.4rem;
+}
+
+/* Parem pool */
+.code-box {
+  background: #0c101e;
+  border: 1px solid #2c3749;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.code-block {
+  position: relative;
+  background: transparent;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  color: #4ef5c6;
+  white-space: pre-wrap;
+  line-height: 1.4rem;
+}
