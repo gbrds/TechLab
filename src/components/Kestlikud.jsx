@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CatchBreachScene from "../games/catchBreach/catchBreach.jsx";
 import "./UX.css";
 
 function Kestlikud() {
@@ -40,9 +41,7 @@ function Kestlikud() {
 
         {/* Mäng */}
         <div className="game-section">
-          <div className="game-placeholder">
-            Mäng siia
-          </div>
+          <CatchBreachScene />
         </div>
       </div>
     </div>

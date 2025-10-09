@@ -3,11 +3,19 @@ import Phaser from "phaser";
 export default class Ui_GameScene extends Phaser.Scene {
   constructor() {
     super("Ui_GameScene");
+    this.score = 0;
   }
 
   create() {
-    // --- Background color
+    // --- Background
     this.cameras.main.setBackgroundColor(0x0f0f1a);
+
+    // --- Score text
+    this.scoreText = this.add.text(500, 550, `0/${15} correct`, {
+      fontSize: "24px",
+      color: "#ffffff",
+      fontStyle: "bold",
+    }).setOrigin(0.5);
 
     // --- Game data
     this.wordsData = [
@@ -28,7 +36,7 @@ export default class Ui_GameScene extends Phaser.Scene {
       { text: "Kasutajalooad", correct: "Defineerimine" },
     ];
 
-    // --- Drop zones (bright colors)
+    // --- Drop zones
     this.dropZones = [
       { label: "Empatiseerimine", x: 120, y: 420, color: 0x0074d9 },
       { label: "Defineerimine", x: 320, y: 420, color: 0xff4136 },
@@ -38,20 +46,22 @@ export default class Ui_GameScene extends Phaser.Scene {
     ];
 
     // --- Create drop zones visually
-    this.dropZones.forEach((zone) => {
+    this.dropZones.forEach(zone => {
       const rect = this.add.rectangle(zone.x, zone.y, 160, 160, zone.color, 0.4)
         .setStrokeStyle(3, 0xffffff)
         .setInteractive({ dropZone: true });
+
       const label = this.add.text(zone.x, zone.y + 90, zone.label, {
         fontSize: "14px",
         color: "#ffffff",
         align: "center",
       }).setOrigin(0.5);
+
       rect.label = zone.label;
       zone.area = rect;
     });
 
-    // --- Create draggable words (light blue background for visibility)
+    // --- Create draggable words
     Phaser.Utils.Array.Shuffle(this.wordsData);
     this.wordsData.forEach((word, index) => {
       const x = 120 + (index % 5) * 180;
@@ -71,7 +81,7 @@ export default class Ui_GameScene extends Phaser.Scene {
       card.data.set("placedIn", null);
     });
 
-    // --- Enable drag events
+    // --- Drag events
     this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
       gameObject.x = dragX;
       gameObject.y = dragY;
@@ -85,41 +95,36 @@ export default class Ui_GameScene extends Phaser.Scene {
       dropZone.setFillStyle(dropZone.fillColor, 0.4);
     });
 
-this.input.on("drop", (pointer, gameObject, dropZone) => {
-  // --- Initialize children array for this drop zone if needed
-  if (!dropZone.children) dropZone.children = [];
+    this.input.on("drop", (pointer, gameObject, dropZone) => {
+      if (!dropZone.children) dropZone.children = [];
 
-  // --- If the word was previously in another drop zone, remove it from there
-  if (gameObject.data.get("placedIn")) {
-    const oldZone = this.dropZones.find(z => z.label === gameObject.data.get("placedIn"));
-    if (oldZone && oldZone.area.children) {
-      oldZone.area.children = oldZone.area.children.filter(child => child !== gameObject);
-      
-      // Reposition remaining words in the old drop zone
+      // Remove from old drop zone
+      if (gameObject.data.get("placedIn")) {
+        const oldZone = this.dropZones.find(z => z.label === gameObject.data.get("placedIn"));
+        if (oldZone && oldZone.area.children) {
+          oldZone.area.children = oldZone.area.children.filter(child => child !== gameObject);
+          const spacing = 30;
+          const total = oldZone.area.children.length;
+          oldZone.area.children.forEach((child, index) => {
+            child.x = oldZone.area.x;
+            child.y = oldZone.area.y - ((total - 1) * spacing) / 2 + index * spacing;
+          });
+        }
+      }
+
+      // Add to new drop zone
+      dropZone.children.push(gameObject);
+      gameObject.data.set("placedIn", dropZone.label);
+
       const spacing = 30;
-      const total = oldZone.area.children.length;
-      oldZone.area.children.forEach((child, index) => {
-        child.x = oldZone.area.x;
-        child.y = oldZone.area.y - ((total - 1) * spacing) / 2 + index * spacing;
+      const total = dropZone.children.length;
+      dropZone.children.forEach((child, index) => {
+        child.x = dropZone.x;
+        child.y = dropZone.y - ((total - 1) * spacing) / 2 + index * spacing;
       });
-    }
-  }
 
-  // --- Add word to new drop zone
-  dropZone.children.push(gameObject);
-  gameObject.data.set("placedIn", dropZone.label);
-
-  // --- Arrange all words in a column
-  const spacing = 30; // vertical spacing between words
-  const total = dropZone.children.length;
-  dropZone.children.forEach((child, index) => {
-    child.x = dropZone.x;
-    child.y = dropZone.y - ((total - 1) * spacing) / 2 + index * spacing;
-  });
-
-  dropZone.setFillStyle(dropZone.fillColor, 0.4);
-});
-
+      dropZone.setFillStyle(dropZone.fillColor, 0.4);
+    });
 
     this.input.on("dragend", (pointer, gameObject, dropped) => {
       if (!dropped) {
@@ -128,24 +133,32 @@ this.input.on("drop", (pointer, gameObject, dropZone) => {
       }
     });
 
-    console.log("✅ Phaser scene loaded successfully");
+    // --- Check answers button inside Phaser
+    this.checkButton = this.add.text(500, 500, "Check Answers", {
+      fontSize: "20px",
+      color: "#000000",
+      backgroundColor: "#ffd700",
+      padding: { x: 10, y: 5 },
+    }).setOrigin(0.5).setInteractive();
+
+    this.checkButton.on("pointerdown", () => {
+      this.checkAnswers();
+    });
   }
 
-  // --- Method called from React
+  // --- Method to check answers
   checkAnswers() {
     let correctCount = 0;
-    this.children.list.forEach((child) => {
-      if (child.data && child.data.get("placedIn")) {
-        if (child.data.get("placedIn") === child.data.get("correct")) {
-          correctCount++;
-        }
+    this.children.list.forEach(child => {
+      if (child.data && child.data.get("placedIn") === child.data.get("correct")) {
+        correctCount++;
       }
     });
 
-    const event = new CustomEvent("updateScore", { detail: correctCount });
-    window.dispatchEvent(event);
+    this.score = correctCount;
+    if (this.scoreText) this.scoreText.setText(`${correctCount}/${this.wordsData.length} correct`);
+    this.events.emit("updateScore", correctCount);
 
-    // Small visual feedback
     if (correctCount === this.wordsData.length) {
       const winText = this.add.text(500, 300, "🎉 All Correct!", {
         fontSize: "32px",
@@ -160,5 +173,10 @@ this.input.on("drop", (pointer, gameObject, dropZone) => {
         duration: 800,
       });
     }
+  }
+
+  // --- Optional restart/reset
+  restartGame() {
+    this.scene.restart();
   }
 }

@@ -3,7 +3,6 @@ import FolderCard from './FolderCard';
 import './FolderGrid.css';
 
 function FolderGrid({ folders, onFolderClick }) {
-function FolderGrid({ folders, onFolderClick }) {
   return (
     <div className="folders-grid">
       {folders.map((folder) => (

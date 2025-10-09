@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import SignalBoosterGame from "../games/signalBooster/signalBooster.jsx";
 import "./UX.css"; 
 
 function IKT() {
@@ -40,9 +41,7 @@ function IKT() {
 
         {/* Mäng */}
         <div className="game-section">
-          <div className="game-placeholder">
-            Mäng siia.
-          </div>
+          <SignalBoosterGame />
         </div>
       </div>
     </div>

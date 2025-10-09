@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CodeFiderView from "../games/softDevGame/softDevGame.jsx"
 import "./UX.css"; // UX stiili kasutamine
 
 function Tarkvara() {
@@ -42,9 +43,7 @@ function Tarkvara() {
 
         {/* Mänguala */}
         <div className="game-section">
-          <div className="game-placeholder">
-            Mäng siia!
-          </div>
+          <CodeFiderView />
         </div>
       </div>
     </div>

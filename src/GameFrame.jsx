@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import Phaser from "phaser";
-import SnakeGame from "./games/snake/SnakeGame";
 import CodeFinder from "./games/softDevGame/softDevGame.js";
 // PLACEHOLDER: Your teammates will import their game scenes here
 // import UXGame from "./games/ux/UXGame";

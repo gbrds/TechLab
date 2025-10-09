@@ -8,8 +8,8 @@ export default function CodeFinderView() {
     useEffect(() => {
         const config = {
             type: Phaser.AUTO,
-            width: 1240,
-            height: 600,
+            width: 1150,
+            height: 590,
             backgroundColor: "#111",
             parent: gameRef.current,
             scene: [CodeFinder],
@@ -20,5 +20,5 @@ export default function CodeFinderView() {
         return () => game.destroy(true)
     }, [])
 
-    return <div ref={gameRef} style={{ width: "800px", height: "600px", margin: "0 auto" }}></div>
+    return <div ref={gameRef} style={{ width: "100%", height: "100%", margin: "0 auto", justifyContent: "center", alignItems: "center", display: "flex" }}></div>
 }

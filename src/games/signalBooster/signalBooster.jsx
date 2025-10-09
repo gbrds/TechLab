@@ -9,8 +9,8 @@ const SignalBoosterGame = () => {
     if (!gameRef.current) {
       const config = {
         type: Phaser.AUTO,
-        width: 800,          // Canvas width
-        height: 800,         // Canvas height
+        width: 1150,          // Canvas width
+        height: 590,         // Canvas height
         backgroundColor: "#1a1a1a",
         parent: "phaser-container",
         scene: [SignalBooster],
@@ -28,7 +28,7 @@ const SignalBoosterGame = () => {
     };
   }, []);
 
-  return <div id="phaser-container" style={{ margin: "0 auto" }} />;
+  return <div id="phaser-container" style={{ width: "100%", height: "100%", margin: "0 auto", justifyContent: "center", alignItems: "center", display: "flex" }} />;
 };
 
 export default SignalBoosterGame;

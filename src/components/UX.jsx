@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Ui_Game from "../games/Ui_Game/Ui_Game.jsx";
 import "./UX.css";
 
 function UX() {
@@ -43,9 +44,7 @@ function UX() {
 
         {/* Mängupaneel */}
         <div className="game-section">
-          <div className="game-placeholder">
-           Mäng siia!
-          </div>
+          <Ui_Game />
         </div>
       </div>
     </div>

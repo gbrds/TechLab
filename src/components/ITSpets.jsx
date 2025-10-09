@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import CableConnectScene from "../games/Cable_Connect/Cable_Connect.jsx";
 import "./UX.css"; // UX stiili kasutamine
 
 function ITSpetsialist() {
@@ -40,9 +41,7 @@ function ITSpetsialist() {
 
         {/* RIGHT PANEL */}
         <div className="game-section">
-          <div className="game-placeholder">
-            Mäng siia
-          </div>
+          <CableConnectScene />
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
 import GameFrame from "./GameFrame";
 import FolderGrid from "./components/FolderGrid";
 import AlertBanner from "./components/AlertBanner";
@@ -34,12 +34,10 @@ import ICTLocked from "./svg/ICT_Locked.svg";
 import ICTHover from "./svg/ICT_Hover.svg";
 import ICTUnlocked from "./svg/ICT_Unlocked.svg";
 
-
 function Home() {
   const navigate = useNavigate();
   const passThreshold = 4;
-  
-  // Game completion state - tracks which games have been completed
+
   const [completedGames, setCompletedGames] = useState({
     UX: false,
     Dev: false,
@@ -48,62 +46,43 @@ function Home() {
     ICT: false
   });
 
-  // Calculate progress based on completed games
   const completedCount = Object.values(completedGames).filter(Boolean).length;
-  
-  // Base folder configuration with dynamic unlocking
+
+  // Base folder setup with routes
   const baseFolders = [
     { 
-      id: 1, 
-      name: 'UX', 
-      unlocked: true,  
-      progress: completedGames.UX ? passThreshold : 0, 
+      id: 1, name: 'UX', route: '/ux-ui', unlocked: true, progress: completedGames.UX ? passThreshold : 0, 
       icons: { unlocked: UXUnlocked, hover: UXHover, locked: UXLocked } 
     },
     { 
-      id: 2, 
-      name: 'Dev', 
-      unlocked: completedGames.UX, 
-      progress: completedGames.Dev ? passThreshold : 0, 
+      id: 2, name: 'Dev', route: '/tarkvara', unlocked: completedGames.UX, progress: completedGames.Dev ? passThreshold : 0, 
       icons: { unlocked: DevUnlocked, hover: DevHover, locked: DevLocked } 
     },
     { 
-      id: 3, 
-      name: 'Sus', 
-      unlocked: completedGames.UX && completedGames.Dev, 
-      progress: completedGames.Sus ? passThreshold : 0, 
+      id: 3, name: 'Sus', route: '/kestlikud', unlocked: completedGames.UX && completedGames.Dev, progress: completedGames.Sus ? passThreshold : 0, 
       icons: { unlocked: SusUnlocked, hover: SusHover, locked: SusLocked } 
     },
     { 
-      id: 4, 
-      name: 'IT', 
-      unlocked: completedGames.UX && completedGames.Dev && completedGames.Sus, 
-      progress: completedGames.IT ? passThreshold : 0, 
+      id: 4, name: 'IT', route: '/ITSpetsialist', unlocked: completedGames.UX && completedGames.Dev && completedGames.Sus, progress: completedGames.IT ? passThreshold : 0, 
       icons: { unlocked: ITUnlocked, hover: ITHover, locked: ITLocked } 
     },
     { 
-      id: 5, 
-      name: 'ICT', 
-      unlocked: completedGames.UX && completedGames.Dev && completedGames.Sus && completedGames.IT, 
-      progress: completedGames.ICT ? passThreshold : 0, 
+      id: 5, name: 'ICT', route: '/IKT', unlocked: completedGames.UX && completedGames.Dev && completedGames.Sus && completedGames.IT, progress: completedGames.ICT ? passThreshold : 0, 
       icons: { unlocked: ICTUnlocked, hover: ICTHover, locked: ICTLocked } 
     }
   ];
 
-  // Compute statuses and provide shared status icons
-  const folders = baseFolders.map((f) => {
+  const folders = baseFolders.map(f => {
     let status = f.unlocked ? 'unlocked' : 'locked';
     if (f.progress >= passThreshold) status = 'completed';
 
-    // Update folder icon based on completion status
     const updatedIcons = { ...f.icons };
     if (f.progress >= passThreshold) {
-      // When completed, show unlocked icon
       updatedIcons.unlocked = f.icons.unlocked;
     } else {
-      // When not completed, show locked icon even if unlocked
-      updatedIcons.unlocked = f.icons.locked;
+      updatedIcons.unlocked = f.icons.unlocked;
     }
+
     return {
       ...f,
       icons: updatedIcons,
@@ -112,39 +91,26 @@ function Home() {
         locked: FolderLocked,
         unlocked: FolderUnlocked,
         completed: FolderCompleted,
-        failed: FolderFailed,
-      },
+        failed: FolderFailed
+      }
     };
   });
 
-  // State for showing game frame
   const [showGameFrame, setShowGameFrame] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
-  
-  // State for completion modal
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
-  // Function to handle game completion
+  // Game completion
   const handleGameComplete = (folderId, score) => {
     if (score >= passThreshold) {
       const gameNames = { 1: 'UX', 2: 'Dev', 3: 'Sus', 4: 'IT', 5: 'ICT' };
       const gameName = gameNames[folderId];
       if (gameName) {
         setCompletedGames(prev => {
-          const newState = {
-            ...prev,
-            [gameName]: true
-          };
-          
-          // Check if all games are completed
-          const allCompleted = Object.values(newState).every(Boolean);
-          if (allCompleted) {
-            // Show completion modal after a short delay
-            setTimeout(() => {
-              setShowCompletionModal(true);
-            }, 500);
+          const newState = { ...prev, [gameName]: true };
+          if (Object.values(newState).every(Boolean)) {
+            setTimeout(() => setShowCompletionModal(true), 500);
           }
-          
           return newState;
         });
       }
@@ -153,63 +119,42 @@ function Home() {
     setCurrentGameId(null);
   };
 
-  // Function to start a game
+  const handleFolderClick = (folder) => {
+    if (!folder.unlocked) return;
+    if (folder.route) navigate(folder.route);
+    else startGame(folder.id);
+  };
+
   const startGame = (folderId) => {
     setCurrentGameId(folderId);
     setShowGameFrame(true);
   };
 
-  // Function to close game frame
   const closeGameFrame = () => {
     setShowGameFrame(false);
     setCurrentGameId(null);
   };
 
-  // Function to close completion modal
-  const closeCompletionModal = () => {
-    setShowCompletionModal(false);
-  };
-
+  const closeCompletionModal = () => setShowCompletionModal(false);
 
   return (
     <div style={{ padding: "2rem", background: "#160C21", minHeight: "100vh" }}>
       <div className="app-title">🚨 VOCO TechLab</div>
-
-      <AlertBanner allCompleted={folders.every((f) => f.status === "completed")} />
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) auto",
-          gap: "3rem",
-          alignItems: "start",
-          padding: "0 2rem",
-        }}
-      >
-        {/* Navigatsiooni võimaldamine */}
-        <FolderGrid folders={folders} onFolderClick={startGame} onFolderClick={handleFolderClick} />
+      <AlertBanner allCompleted={folders.every(f => f.status === "completed")} />
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: "3rem", alignItems: "start", padding: "0 2rem" }}>
+        <FolderGrid folders={folders} onFolderClick={handleFolderClick} />
         <ProgressPanel completedCount={completedCount} />
       </div>
 
-      {/* Game Frame */}
       {showGameFrame && (
-        <GameFrame 
-          folderId={currentGameId} 
-          onGameComplete={handleGameComplete}
-          onClose={closeGameFrame}
-        />
+        <GameFrame folderId={currentGameId} onGameComplete={handleGameComplete} onClose={closeGameFrame} />
       )}
 
-      {/* Completion Modal */}
-      <CompletionModal 
-        isOpen={showCompletionModal}
-        onClose={closeCompletionModal}
-      />
+      <CompletionModal isOpen={showCompletionModal} onClose={closeCompletionModal} />
     </div>
   );
 }
 
-// -------------- Routid -------------- //
 function App() {
   return (
     <Router>

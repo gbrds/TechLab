@@ -11,8 +11,8 @@ const Cable_Connect = () => {
     const config = {
       type: Phaser.AUTO,
       parent: "phaser-container",
-      width: 1000,
-      height: 600,
+      width: 1150,
+      height: 590,
       backgroundColor: "#0f0f1a",
       scene: [CableConnectScene],
     };
@@ -30,12 +30,7 @@ const Cable_Connect = () => {
   return (
     <div
       id="phaser-container"
-      style={{
-        width: "1000px",
-        height: "600px",
-        margin: "auto",
-        backgroundColor: "#0f0f1a",
-      }}
+      style={{ width: "100%", height: "100%", margin: "0 auto", justifyContent: "center", alignItems: "center", display: "flex" }}
     ></div>
   );
 };

@@ -83,8 +83,8 @@ export default function CatchBreachView() {
 
         const config = {
             type: Phaser.AUTO,
-            width: 1240,
-            height: 600,
+            width: 1150,
+            height: 580,
             backgroundColor: "#111",
             parent: gameRef.current,
             scene: [CatchBreachScene],
@@ -101,7 +101,7 @@ export default function CatchBreachView() {
     return (
         <div
             ref={gameRef}
-            style={{ width: "800px", height: "600px", margin: "0 auto" }}
+            style={{ width: "100%", height: "100%", margin: "0 auto", justifyContent: "center", alignItems: "center", display: "flex" }}
         ></div>
     )
 }
